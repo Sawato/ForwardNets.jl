@@ -4,7 +4,7 @@ type ForwardNet{T<:Real}
     name_to_index::Dict{Symbol,Int} # Symbol → index in dag and nodes (note: not all Nodes have names)
     name_counter::Int
 
-    ForwardNet() = new(DiGraph(0), Node[], Dict{Symbol,Int}(), 0)
+    ForwardNet{T}() where T = new(DiGraph(0), Node[], Dict{Symbol,Int}(), 0) 
 end
 
 Base.getindex(net::ForwardNet, index::Int) = net.nodes[index]
@@ -28,7 +28,7 @@ function Base.push!{T}(net::ForwardNet{T}, node::Node{T}, parents::Vector{Int}=I
     net
 end
 function Base.push!{T}(net::ForwardNet{T}, node::Node{T}, parents::Union{Vector{Symbol}, Vector{NameOrIndex}})
-    int_parents = Array(Int, length(parents))
+    int_parents = Array{Int}(length(parents))
     for (i,p) in enumerate(parents)
         if isa(p, Int)
             int_parents[i] = p
